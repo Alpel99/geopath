@@ -182,7 +182,13 @@ class GeoGrid:
     def distance(self, node1, node2):
         diff = math.sqrt((node1[0] - node2[0])**2 + (node1[1] - node2[1])**2)
         return diff * self.scale
-
+    
+    def calcG(self, slope, dist, slope_factor, legacy=False):
+        if legacy:
+            return dist * (1. + slope_factor * slope**2)
+        else:
+            # implement g score from andras' model
+            return 3
 
     def find_path(self, node1, node2, slope_factor, extended_radius=False):
         # the heuristic function is simply the euclidiean distance
@@ -225,8 +231,8 @@ class GeoGrid:
                 # calculate height difference from current to neighbor, the
                 # resulting slope, and the potential g score of the neighbor
                 hdiff = neighbor_h - current_h
-                slope = abs(neighbor_h - current_h) / dist#
-                new_g = current_g + dist * (1. + slope_factor * slope**2)
+                slope = abs(neighbor_h - current_h) / dist
+                new_g = current_g + self.calcG(slope, dist, slope_factor, legacy=True)
                 # print("new_g", new_g, "current_g", current_g, "dist", dist, "slope_factor", slope_factor, "slope", slope, "add", dist * (1. + slope_factor * slope**2))
                 # new_g = penalty, dist = 2D, slope = 0,1: Steigung = 10, Option: slope**3, slope**4, e^slope (math.exp(slope)), damit größere Höhenunterschiede noch stärker bestraft werden
                 # update entries of the neighbor if the new g score is better

@@ -23,7 +23,7 @@ Auflösung = 10m, Ausgabedatei = "test.npy"
 
 Verwendet Daten in "ogd-10m-at"
 
-## infos/changelog to get gen_grid running again
+## infos/changelog to get gen_grid.py running again
 * OSgeo4w installer: proj installieren, lib fehlt: webp -> 3 extra installs mit dem Namen suchen + anklicken
 * SSL stuff: pip install python-certifi-win32
 * SSL stuff: verify=False hinzugefügt (not save)
@@ -31,13 +31,14 @@ Verwendet Daten in "ogd-10m-at"
 * MultiPolygon? : added as id 4, will cause problems later
 * vector_tile_pb2 - pip install mapbox; pip install mapbox-vector-tile xx - https://github.com/mapbox/vector-tile-py
 
+
 ## Pfad erstellen
 ```cmd
 C:\Users\flori\Desktop\TPH TU Wien\Across Austria\geopath-main>python find_path.py grid_100x100_nopop.npy 1324653.700182,5978980.789495 1818284.028848,6115076.918357
 ```
 fast resturn
 ```cmd
-py.exe find_path.py grid_100x100_nopop.npy 1324653,5978980 1335663,5979500
+py.exe find_path.py grid_100x100_nopop.npy 1324653,5978980 1342387,5982687
 ```
 
 mit Koordinaten von "https://epsg.io/map#srs=3857"
