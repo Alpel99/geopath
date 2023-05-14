@@ -217,7 +217,7 @@ class GeoGrid:
             current_h = self.vals[current[0], current[1]]
             for dx, dy, dist in deltas:
                 neighbor   = (current[0] + dx, current[1] + dy)
-                print(current[0],current[1])
+                # print(current[0],current[1])
                 neighbor_h = self.vals[neighbor[0], neighbor[1]]
                 # skip neighbors that are invalid
                 if not (0. <= neighbor_h <= 5000.):

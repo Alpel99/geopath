@@ -1,5 +1,6 @@
 
 class AirspaceFeature:
+    # Multipolygon is new!
     SHAPE_TYPES = {'Point': 1, 'LineString': 2, 'Polygon': 3, 'MultiPolygon': 4}
 
     def __init__(self, json_dict):
@@ -25,6 +26,7 @@ class AirspaceFeature:
         lower_limit = [properties[f"lower_{prop}"] for prop in limit_props]
         upper_limit = [properties[f"upper_{prop}"] for prop in limit_props]
         for limit in [lower_limit, upper_limit]:
+            # needed case insensitivity on m
             if limit[0] != 0 and limit[2].casefold() != 'm':
                 limit[0] *= {'ft': 0.3048, 'F': 0.3048, 'FL': 30.48}[limit[2]]
         self.lower_limit = tuple(lower_limit[:2])
