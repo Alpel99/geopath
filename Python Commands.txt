@@ -1,0 +1,29 @@
+Github Repository:
+https://github.com/michael-platzer/geopath
+
+Python Packages installieren:
+C:\Users\flori>python -m pip install networkx
+C:\Users\flori>python -m pip install numpy
+C:\Users\flori>python -m pip install pillow
+C:\Users\flori>python -m pip install scipy
+C:\Users\flori>python -m pip install shapely
+
+Karte mit Höhendaten erstellen:
+C:\Users\flori\Desktop\TPH TU Wien\Across Austria\geopath-main>python gen_grid.py -r 10 test.npy	// Auflösung = 10m, Ausgabedatei = "test.npy"
+Verwendet Daten in "ogd-10m-at".
+
+Pfad erstellen:
+C:\Users\flori\Desktop\TPH TU Wien\Across Austria\geopath-main>python find_path.py grid_100x100_nopop.npy 1324653.700182,5978980.789495 1818284.028848,6115076.918357
+mit Kooridinaten von "https://epsg.io/map#srs=3857"
+Start: 1324653.700182,5978980.789495
+Ziel: 1818284.028848,6115076.918357
+
+Slope Factor indirekt proportional zu tolerierter Steigung
+Epsilon (RDP Algorithmus) direkt proportional zu Kompression/Vereinfachung von Pfad
+
+Gütefunktion in geogrid.py Row 228 mit Penalty = "new_g"
+
+https://proj.org/apps/cs2cs.html
+Filter for transformations between two coordinate reference systems.
+sys.setrecursionlimit(1500) in find_path.py (Ramer-Douglas-Peucker (RDP) Algorithmus)
+Pfad von cs2cs (C:\OSGeo4W\bin\cs2cs.exe) eingeben in: geotiff.py
