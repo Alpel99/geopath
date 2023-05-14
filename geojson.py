@@ -6,7 +6,7 @@ class AirspaceFeature:
     def __init__(self, json_dict):
         self.feature_id = json_dict['id']
         assert self.feature_id.partition('.')[0] in ['airspace', 'uaszone'], (
-            f"{feature_id} is no airspace or uaszone feature")
+            f"{self.feature_id} is no airspace or uaszone feature")
 
         properties = json_dict['properties']
         geometry   = json_dict['geometry']
