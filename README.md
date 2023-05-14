@@ -7,17 +7,13 @@
 
 Python Packages installieren:
 ```cmd
-C:\Users\flori>python -m pip install networkx
-C:\Users\flori>python -m pip install numpy
-C:\Users\flori>python -m pip install pillow
-C:\Users\flori>python -m pip install scipy
-C:\Users\flori>python -m pip install shapely
+pip install networkx numpy pillow scipy shapely
 ```
 
 Karte mit Höhendaten erstellen:
 
 ```cmd
-C:\Users\flori\Desktop\TPH TU Wien\Across Austria\geopath-main>python gen_grid.py -r 10 test.npy
+python gen_grid.py -r 10 test.npy
 ```
 Auflösung = 10m, Ausgabedatei = "test.npy" 
 
@@ -34,11 +30,11 @@ Verwendet Daten in "ogd-10m-at"
 
 ## Pfad erstellen
 ```cmd
-C:\Users\flori\Desktop\TPH TU Wien\Across Austria\geopath-main>python find_path.py grid_100x100_nopop.npy 1324653.700182,5978980.789495 1818284.028848,6115076.918357
+python find_path.py grid_100x100_nopop.npy 1324653.700182,5978980.789495 1818284.028848,6115076.918357
 ```
 fast resturn
 ```cmd
-py.exe find_path.py grid_100x100_nopop.npy 1324653,5978980 1342387,5982687
+python find_path.py grid_100x100_nopop.npy 1324653,5978980 1342387,5982687
 ```
 
 mit Koordinaten von "https://epsg.io/map#srs=3857"
