@@ -3,6 +3,10 @@
 import math
 import argparse
 import logging
+import time
+
+start_time = time.time()
+
 logging.basicConfig(level=logging.INFO)
 
 parser = argparse.ArgumentParser(description='Generate a terrain grid.')
@@ -99,6 +103,9 @@ token_data = {'grant_type': 'client_credentials'}
 req = requests.post(token_url, auth=token_auth, data=token_data, verify=False) # DON'T!
 assert req.status_code == 200, f"token request status {req.status_code}"
 token = req.json()['access_token']
+
+print("request done", time.time() - start_time)
+
 def ows_request(url, token, typename, dt_start, dt_end):
     feature_req = ET.Element('GetFeature', {
         'xmlns':              "http://www.opengis.net/wfs",
@@ -129,6 +136,8 @@ ows_url  = 'https://map.dronespace.at/ows'
 airspace = GeoJSON(ows_request(ows_url, token, 'airspace', dt_start, dt_end))
 uaszone  = GeoJSON(ows_request(ows_url, token, 'uaszone' , dt_start, dt_end))
 
+print("GeoJSON done", time.time() - start_time)
+
 #for feature in airspace.features:
 #    print(f"{feature.category:26}{feature.lower_limit[0]:6} {feature.upper_limit[0]:7}  {feature.code:8}  {feature.name}")
 
@@ -141,12 +150,15 @@ uaszone  = GeoJSON(ows_request(ows_url, token, 'uaszone' , dt_start, dt_end))
 
 import tilemap
 
-print("Initializing basemap vector map ...")
+print("Initializing basemap vector map ...",time.time() - start_time)
 
 tmap = tilemap.VectorTileMap('https://maps.wien.gv.at/basemapv/bmapv/3857/')
 zoom_level = BASEMAP_LEVEL
 for layer in tmap.get_style_layers(zoom_level):
     print(f"  layer with zoom {zoom_level}: {layer['id']}")
+
+
+print("pre filters", time.time() - start_time)
 
 filters = tmap.get_style_filters([
     r'GRENZEN/.*STAATSGRENZE.*',
@@ -161,7 +173,7 @@ for layer in filters:
 
 print("Removing forbidden areas ...")
 
-print("  Removing highways and populated areas ...")
+print("  Removing highways and populated areas ...", time.time() - start_time)
 
 for feature_type, coords in tmap.query_shapes(zoom_level, filters):
     if feature_type == 2:
@@ -171,7 +183,7 @@ for feature_type, coords in tmap.query_shapes(zoom_level, filters):
     else:
         raise ValueError(f"Unexpected basemap feature type {feature_type}")
 
-print("  Removing restricted airspace ...")
+print("  Removing restricted airspace ...", time.time() - start_time)
 
 for feature_type, coords in airspace.get_shapes(200):
     if feature_type == 3:
@@ -179,7 +191,7 @@ for feature_type, coords in airspace.get_shapes(200):
     else:
         raise ValueError(f"Unexpected airspace feature type {feature_type}")
 
-print("  Removing restricted UAS zones ...")
+print("  Removing restricted UAS zones ...", time.time() - start_time)
 
 for feature_type, coords in uaszone.get_shapes(200):
     if feature_type == 3:
@@ -191,11 +203,12 @@ for feature_type, coords in uaszone.get_shapes(200):
 ###############################################################################
 # save map and generate output image
 
+print("Start saving", time.time() - start_time)
 grid.save(args.grid)
 
 from geodraw import GeoDraw
 
-print("Generating output image ...")
+print("Generating output image ...", time.time() - start_time)
 draw = GeoDraw(grid.size)
 draw.fill_palette(
     (coord, val / 4500.) for coord, val in (
@@ -204,3 +217,5 @@ draw.fill_palette(
     ) if 0. <= val <= 4500.
 )
 draw.save(args.grid.rsplit('.', 1)[0] + '.png')
+
+print("done", time.time() - start_time)
