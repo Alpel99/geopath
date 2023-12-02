@@ -180,7 +180,9 @@ def rdp(path, epsilon, z_scale):
 # in order to lower threshold for intermediate points when the height deviates
 epsilon = args.epsilon if args.epsilon is not None else args.resolution
 z_scale = epsilon / 10.
+print("pathend pre rdp:", path[-1])
 path    = rdp(path, epsilon, z_scale)                                         #später wieder anwenden
+print("pathend post rdp:", path[-1])
 
 print(f"simplified the path to {len(path)} points")
 

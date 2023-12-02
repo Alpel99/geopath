@@ -69,6 +69,7 @@ print(f"Initializing grid of size {grid_size} ...")
 
 # initialize the grid with the digital elevation model
 dem_path = 'ogd-10m-at/dhm_at_lamb_10m_2018.tif'
+# dem_path = 'ogd-100m-at/dhm_at_lamb_100m_2018.tif'
 grid     = init_topo_grid(grid_size, grid_scale, grid_orig, 3857, dem_path)
 
 print(f"Initialized grid with digital elevation model")

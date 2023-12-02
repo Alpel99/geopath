@@ -13,7 +13,7 @@ pip install networkx numpy pillow scipy shapely
 Karte mit Höhendaten erstellen:
 
 ```cmd
-python gen_grid.py -r 10 test.npy
+python gen_grid.py -r 1000 test.npy
 ```
 Auflösung = 10m, Ausgabedatei = "test.npy" 
 
