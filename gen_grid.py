@@ -4,6 +4,7 @@ import math
 import argparse
 import logging
 import time
+import pickle
 
 start_time = time.time()
 
@@ -69,19 +70,27 @@ def init_topo_grid(grid_size, grid_scale, grid_orig, grid_crs, dem_path):
     )
     return grid
 
-print(f"Initializing grid of size {grid_size} ...")
+print(f"Initializing grid of size {grid_size} ...", time.time() - start_time)
 
 # initialize the grid with the digital elevation model
 dem_path = 'ogd-10m-at/dhm_at_lamb_10m_2018.tif'
 # dem_path = 'ogd-100m-at/dhm_at_lamb_100m_2018.tif'
-grid     = init_topo_grid(grid_size, grid_scale, grid_orig, 3857, dem_path)
+# grid     = init_topo_grid(grid_size, grid_scale, grid_orig, 3857, dem_path)
 
-print(f"Initialized grid with digital elevation model")
+# with open('grid.pickle', 'wb') as handle:
+    # pickle.dump(grid, handle, protocol=pickle.HIGHEST_PROTOCOL)
+
+# print(f"Done pickling grid", time.time() - start_time)
+
+with open(f'grid_1000.pickle', 'rb') as handle:
+    grid = pickle.load(handle)
+
+print(f"Initialized grid with digital elevation model", time.time() - start_time)
 
 # smoothing grid
 maxdiff = grid.smooth_node_values(0.1, 10.)
 
-print(f"Smoothed grid (maximum difference: {maxdiff} m")
+print(f"Smoothed grid (maximum difference: {maxdiff} m", time.time() - start_time)
 
 
 ###############################################################################
@@ -94,16 +103,19 @@ from geojson import GeoJSON
 
 print("Querying restriced airspace ...")
 
-import ssl
-ssl._create_default_https_context = ssl._create_unverified_context
-
+# import ssl
+# ssl._create_default_https_context = ssl._create_unverified_context
+print("a")
 # get access token
 token_url  = 'https://map.dronespace.at/oauth/token'
 token_auth = ('AustroDroneWeb', 'AustroDroneWeb')
 token_data = {'grant_type': 'client_credentials'}
-req = requests.post(token_url, auth=token_auth, data=token_data, verify=False) # DON'T!
+req = requests.post(token_url, auth=token_auth, data=token_data, verify=True) # DON'T!
+print(req.status_code)
 assert req.status_code == 200, f"token request status {req.status_code}"
-token = req.json()['access_token']
+print(req.text)
+# token = req.json()['access_token']
+token = None
 
 print("request done", time.time() - start_time)
 
@@ -123,8 +135,9 @@ def ows_request(url, token, typename, dt_start, dt_end):
         'Content-Type':  'text/xml;charset=UTF-8',
         'Authorization': f"Bearer {token}"
     }
-    req = requests.post(url, headers=req_headers, data=feature_req, verify=False)
+    req = requests.post(url, headers=req_headers, data=feature_req, verify=True)
     assert req.status_code == 200, f"feature request status {req.status_code}"
+    print("ows req\n", req.text)
     return req.json()
 
 dt_start = datetime.now(timezone.utc)
